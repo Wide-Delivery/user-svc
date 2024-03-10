@@ -1,6 +1,7 @@
 import { createClient } from 'redis';
+import customConfig from "../config/default";
 
-const redisUrl = `redis://localhost:6379`;
+const redisUrl = customConfig.redisUrl;
 const redisClient = createClient({
     url: redisUrl,
 });

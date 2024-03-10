@@ -32,8 +32,8 @@ const options= {
     oneofs: true,
 };
 
-const PORT = 3023;
-const PROTO_FILE = '../protos/services.proto';
+const PORT = customConfig.port;
+const PROTO_FILE = './protos/services.proto';
 const packageDef = protoLoader.loadSync(
     path.resolve(__dirname, PROTO_FILE),
     options

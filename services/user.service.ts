@@ -15,7 +15,7 @@ import {ApplicationError} from "../errors/ApplicationError";
 import UserModel from "../business-logic/schemas/user.schema";
 
 export const createUser = async (preCreatedUser: SignUpUserInput__Output): Promise<User | null> => {
-    const hashedPassword = await bcrypt.hash(preCreatedUser.password, 12);
+    const hashedPassword = preCreatedUser.password ? await bcrypt.hash(preCreatedUser.password, 12) : null;
 
     // validate email, phoneNmer
     //
