@@ -5,6 +5,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://root:example@wd-mongo:27017/auth-service?authSource=admin
+      - REDIS_URL=redis://wd-redis:6379
     ports:
       - '3005:3005'
     volumes:
