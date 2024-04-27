@@ -113,7 +113,7 @@ export const refreshJwtTokens = async (refreshToken: string) => {
     if (!session) {
         return {
             code: grpc.status.PERMISSION_DENIED,
-            message,
+            message: 'Refresh token expired',
         };
     }
 
