@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://root:example@wd-mongo:27017/auth-service?authSource=admin
     ports:
       - '3005:3005'
     volumes:
