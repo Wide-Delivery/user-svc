@@ -13,10 +13,11 @@ const getMeHandler = async (
     const decoded = verifyJwt<{sub: string}>(access_token, 'accessTokenPublicKey');
 
     if (!decoded) {
-        return {
+        callback( {
             code: grpc.status.PERMISSION_DENIED,
             message: 'Access token is expired or incorrect',
-        };
+        });
+        return;
     }
 
     const userJson = await redisClient.get(decoded.sub);
