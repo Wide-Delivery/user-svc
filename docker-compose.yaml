@@ -9,6 +9,7 @@ services:
       - MONGO_CONNECTION_STRING=mongodb+srv://ginger:omwlnVzmEJQP7I9J@wide-delivery-cluster.ae3xjln.mongodb.net/auth-service?retryWrites=true&w=majority&appName=wide-delivery-cluster
 #      - MONGO_CONNECTION_STRING=mongodb://root:example@wd-mongo:27017/auth-service?authSource=admin
       - REDIS_URL=redis://wd-redis:6379
+      - USER_SERVICE_PORT=3005
     ports:
       - '3005:3005'
     volumes:

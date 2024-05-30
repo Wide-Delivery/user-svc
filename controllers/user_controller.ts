@@ -11,8 +11,10 @@ const getMeHandler = async (
     const {access_token} = call.request;
     const decoded = verifyJwt<{sub: string}>(access_token, 'accessTokenPublicKey');
 
+    console.log('[decoded]', decoded)
+
     if (!decoded) {
-        callback( {
+        callback({
             code: grpc.status.PERMISSION_DENIED,
             message: 'Access token is expired or incorrect',
         });
@@ -20,6 +22,7 @@ const getMeHandler = async (
     }
 
     const userJson = await redisClient.get(decoded.sub);
+    console.log('[userJson]', userJson)
     if (userJson) {
         const user = JSON.parse(userJson);
 
@@ -43,9 +46,12 @@ const getMeHandler = async (
         })
 
     }
-    // if (!user) {
-    //     const userFromDb = await mongoclient get user
-    // }
+    else {
+        callback({
+            code: grpc.status.PERMISSION_DENIED,
+            message: 'Access token redis session expired',
+        });
+    }
 }
 
 module.exports = {
