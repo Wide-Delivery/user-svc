@@ -11,7 +11,7 @@ import {OAuthSignInInput__Output} from "../pb/auth/OAuthSignInInput";
 import {OAuth2Client} from "google-auth-library";
 import {OAUTH_PROVIDERS} from "../constants/oauth-providers";
 import UserModel from "../business-logic/schemas/user.schema";
-import {getUserByEmail} from "../repositories/User_repo";
+import {getUserByEmail} from "../repositories/user.repo";
 
 const client = new OAuth2Client();
 const GOOGLE_CLIENT_ID = '';

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package auth;
+
+message MakeDriverFromUserInput {
+  string user_id = 1;
+  bool may_be_loader = 2;
+  int32 search_radius = 3;
+  TruckInput truck = 4;
+}
+
+message MakeDriverFromUserResponse {
+  Driver driver = 1;
+}
+
+message TruckInput {
+  string truckBrand = 1;
+  string truckModel = 2;
+  string truckPlate = 3;
+  string truckSerialNumber = 4;
+  string truckColor = 5;
+  double freeSpaceLength = 6;
+  double freeSpaceWidth = 7;
+  double freeSpaceHeight = 8;
+}
+
+message Truck {
+    string truckBrand = 1;
+    string truckModel = 2;
+    string truckPlate = 3;
+    string truckSerialNumber = 4;
+    string truckColor = 5;
+    TruckType truckType = 6;
+    double freeSpaceLength = 7;
+    double freeSpaceWidth = 8;
+    double freeSpaceHeight = 9;
+    int32 transportationsCount = 10;
+    bool isAvailableNow = 11;
+}
+
+message Driver {
+  string driverId = 1;
+  string userId = 2;
+  bool mayBeLoader = 3;
+  int32 searchRadius = 4;
+  Truck truck = 5;
+}
+
+enum TruckType {
+  SMALL = 0;
+  MEDIUM = 1;
+  LARGE = 2;
+}
