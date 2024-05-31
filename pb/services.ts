@@ -10,6 +10,8 @@ type SubtypeConstructor<Constructor extends new (...args: any) => any, Subtype> 
 export interface ProtoGrpcType {
   auth: {
     AuthService: SubtypeConstructor<typeof grpc.Client, _auth_AuthServiceClient> & { service: _auth_AuthServiceDefinition }
+    DriverId: MessageTypeDefinition
+    GeneralResponse: MessageTypeDefinition
     GenericResponse: MessageTypeDefinition
     GetMeInput: MessageTypeDefinition
     OAuthSignInInput: MessageTypeDefinition
@@ -20,6 +22,7 @@ export interface ProtoGrpcType {
     SignUpUserInput: MessageTypeDefinition
     SignUpUserResponse: MessageTypeDefinition
     User: MessageTypeDefinition
+    UserId: MessageTypeDefinition
     UserResponse: MessageTypeDefinition
   }
   google: {

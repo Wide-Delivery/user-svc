@@ -1,6 +1,5 @@
-import grpc from "@grpc/grpc-js";
+import * as grpc from "@grpc/grpc-js";
 import {GetMeInput__Output} from "../pb/auth/GetMeInput";
-import {User__Output} from "../pb/auth/User";
 import {verifyJwt} from "../utils/jwt";
 import redisClient from "../utils/connectRedis";
 import {UserResponse__Output} from "../pb/auth/UserResponse";
@@ -13,11 +12,10 @@ const getMeHandler = async (
     const decoded = verifyJwt<{sub: string}>(access_token, 'accessTokenPublicKey');
 
     if (!decoded) {
-        callback( {
+        callback({
             code: grpc.status.PERMISSION_DENIED,
             message: 'Access token is expired or incorrect',
-        });
-        return;
+        };
     }
 
     const userJson = await redisClient.get(decoded.sub);
@@ -48,7 +46,6 @@ const getMeHandler = async (
     //     const userFromDb = await mongoclient get user
     // }
 }
-
 
 module.exports = {
     getMeHandler
