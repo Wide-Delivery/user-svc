@@ -94,10 +94,7 @@ export const isUserRegistered = async (email: string) => {
 export const refreshJwtTokens = async (refreshToken: string) => {
     const message = 'Could not refresh access token';
     if (!refreshToken) {
-        return {
-            code: grpc.status.PERMISSION_DENIED,
-            message,
-        };
+        throw new ApplicationError(message, grpc.status.PERMISSION_DENIED);
     }
 
     // Validate the Refresh token
@@ -107,29 +104,20 @@ export const refreshJwtTokens = async (refreshToken: string) => {
     );
 
     if (!decoded) {
-        return {
-            code: grpc.status.PERMISSION_DENIED,
-            message,
-        };
+        throw new ApplicationError(message, grpc.status.PERMISSION_DENIED);
     }
 
     // Check if the user has a valid session
     const session = await redisClient.get(decoded?.sub);
     if (!session) {
-        return {
-            code: grpc.status.PERMISSION_DENIED,
-            message: 'Refresh token has expired, login again please',
-        };
+        throw new ApplicationError('Refresh token has expired, login again please', grpc.status.PERMISSION_DENIED);
     }
 
     // Check if the user exist
     const user = await getUserById(JSON.parse(session).id);
 
     if (!user) {
-        return {
-            code: grpc.status.PERMISSION_DENIED,
-            message,
-        };
+        throw new ApplicationError('Refresh token has expired, login again please', grpc.status.PERMISSION_DENIED);
     }
 
     return signTokens(User.getModel(user) as User);

@@ -83,13 +83,6 @@ export const refreshTokensHandler = async (
 
         const result = await refreshJwtTokens(refreshToken);
 
-        if (result.code) {
-            callback({
-                code: result.code,
-                message: result.message,
-            });
-        }
-
         // Send response
         callback(null, { access_token: result.access_token, refresh_token: result.refresh_token });
     } catch (err: any) {
