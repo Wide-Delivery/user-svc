@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package auth;
+
+message TruckInput {
+  string truckBrand = 1;
+  string truckModel = 2;
+  string truckPlate = 3;
+  string truckSerialNumber = 4;
+  string truckColor = 5;
+  double freeSpaceLength = 6;
+  double freeSpaceWidth = 7;
+  double freeSpaceHeight = 8;
+}
+
+message Truck {
+  string truckBrand = 1;
+  string truckModel = 2;
+  string truckPlate = 3;
+  string truckSerialNumber = 4;
+  string truckColor = 5;
+  TruckType truckType = 6;
+  double freeSpaceLength = 7;
+  double freeSpaceWidth = 8;
+  double freeSpaceHeight = 9;
+  int32 transportationsCount = 10;
+  bool isAvailableNow = 11;
+}
+
+enum TruckType {
+  SMALL = 0;
+  MEDIUM = 1;
+  LARGE = 2;
+}

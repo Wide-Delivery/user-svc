@@ -14,13 +14,13 @@ dotenv.config();
 import {
     loginController, oAuthSignInHandler,
     refreshTokensHandler,
-    registerController
+    registerController,
 } from './controllers/auth_controller';
 import customConfig from "./config/default";
 import {ProtoGrpcType} from "./pb/services";
 
 
-const { getMeHandler } = require('./controllers/user_controller');
+const { getMeHandler, createDriverFromUserHandler } = require('./controllers/user_controller');
 
 var app  = express();
 

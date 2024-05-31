@@ -10,7 +10,10 @@ import {RefreshTokenResponse} from "../pb/auth/RefreshTokenResponse";
 import {OAuthSignInInput__Output} from "../pb/auth/OAuthSignInInput";
 import {OAuth2Client} from "google-auth-library";
 import {OAUTH_PROVIDERS} from "../constants/oauth-providers";
-import {getUserByEmail} from "../repositories/User_repo";
+import UserModel from "../business-logic/schemas/user.schema";
+import {getUserByEmail} from "../repositories/user.repo";
+
+
 
 const client = new OAuth2Client();
 const GOOGLE_CLIENT_ID = '';
@@ -81,13 +84,6 @@ export const refreshTokensHandler = async (
         const refreshToken = call.request.refresh_token as string;
 
         const result = await refreshJwtTokens(refreshToken);
-
-        if (result.code) {
-            callback({
-                code: result.code,
-                message: result.message,
-            });
-        }
 
         // Send response
         callback(null, { access_token: result.access_token, refresh_token: result.refresh_token });

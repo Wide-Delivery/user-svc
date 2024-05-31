@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package auth;
+
+import "truck.proto";
+
+message Driver {
+  string driverId = 1;
+  string userId = 2;
+  bool mayBeLoader = 3;
+  int32 searchRadius = 4;
+  Truck truck = 5;
+}

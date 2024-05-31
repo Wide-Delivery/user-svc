@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import {PreCreatedUser} from "../types/user";
 import {SignUpUserInput__Output} from "../pb/auth/SignUpUserInput";
-import {getUserByEmail, getUserById, saveUser} from "../repositories/User_repo";
+import {getUserByEmail, getUserById, saveUser} from "../repositories/user.repo";
 import {User, UserDTO, UserLoginDTO} from "../models/user";
 import {SignInUserResponse} from "../pb/auth/SignInUserResponse";
 import * as grpc from '@grpc/grpc-js';
@@ -44,17 +44,22 @@ export const createUser = async (preCreatedUser: SignUpUserInput__Output): Promi
 export const signIn = async (userCredentials: UserLoginDTO): Promise<{ access_token: string, refresh_token: string}> => {
     try {
         const user = await getUserByEmail(userCredentials.email);
+        console.log('[user]', user)
         if (!user || !(await bcrypt.compare(userCredentials.password, user.password))) {
+            console.log('[catch error in signin compare bcrypt]')
             throw new LoginError('Invalid email or password', grpc.status.INVALID_ARGUMENT)
         }
 
         const { access_token, refresh_token } = await signTokens(User.getModel(user) as User);
+
+        console.log('[access tokens]', access_token, refresh_token);
 
         return {
             access_token, refresh_token
         }
     } catch (err: any) {
         if (err.code) {
+            console.log(err)
             throw new LoginError('Invalid email or password', grpc.status.INVALID_ARGUMENT)
         }
         throw new ApplicationError('Login internal error: ' + err.message)
@@ -89,10 +94,7 @@ export const isUserRegistered = async (email: string) => {
 export const refreshJwtTokens = async (refreshToken: string) => {
     const message = 'Could not refresh access token';
     if (!refreshToken) {
-        return {
-            code: grpc.status.PERMISSION_DENIED,
-            message,
-        };
+        throw new ApplicationError(message, grpc.status.PERMISSION_DENIED);
     }
 
     // Validate the Refresh token
@@ -102,42 +104,21 @@ export const refreshJwtTokens = async (refreshToken: string) => {
     );
 
     if (!decoded) {
-        return {
-            code: grpc.status.PERMISSION_DENIED,
-            message,
-        };
+        throw new ApplicationError(message, grpc.status.PERMISSION_DENIED);
     }
 
     // Check if the user has a valid session
     const session = await redisClient.get(decoded?.sub);
     if (!session) {
-        return {
-            code: grpc.status.PERMISSION_DENIED,
-            message: 'Refresh token expired',
-        };
+        throw new ApplicationError('Refresh token has expired, login again please', grpc.status.PERMISSION_DENIED);
     }
 
     // Check if the user exist
     const user = await getUserById(JSON.parse(session).id);
 
     if (!user) {
-        return {
-            code: grpc.status.PERMISSION_DENIED,
-            message,
-        };
+        throw new ApplicationError('Refresh token has expired, login again please', grpc.status.PERMISSION_DENIED);
     }
 
-    // Sign new access token
-    const access_token = signJwt({ sub: user.id }, 'accessTokenPrivateKey', {
-        expiresIn: `${customConfig.accessTokenExpiresIn}m`,
-    });
-
-    const refresh_token = signJwt({ sub: user.id }, 'refreshTokenPrivateKey', {
-        expiresIn: `${customConfig.refreshTokenExpiresIn}m`,
-    });
-
-    return {
-        access_token,
-        refresh_token,
-    }
+    return signTokens(User.getModel(user) as User);
 }

@@ -6,7 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - MONGO_CONNECTION_STRING=mongodb://root:example@wd-mongo:27017/auth-service?authSource=admin
+      - MONGO_CONNECTION_STRING=mongodb+srv://ginger:omwlnVzmEJQP7I9J@wide-delivery-cluster.ae3xjln.mongodb.net/auth-service?retryWrites=true&w=majority&appName=wide-delivery-cluster
+#      - MONGO_CONNECTION_STRING=mongodb://root:example@wd-mongo:27017/auth-service?authSource=admin
       - REDIS_URL=redis://wd-redis:6379
       - USER_SERVICE_PORT=3005
     ports:
@@ -15,6 +16,10 @@ services:
       - /app/node_modules
       - /app/dist
       - ./:/app
+      - wd-user-svc-logs:/var/log/app
+
+volumes:
+    wd-user-svc-logs:
 
 
 

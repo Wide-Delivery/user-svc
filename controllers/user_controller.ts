@@ -1,4 +1,4 @@
-import * as grpc from '@grpc/grpc-js';
+import * as grpc from "@grpc/grpc-js";
 import {GetMeInput__Output} from "../pb/auth/GetMeInput";
 import {verifyJwt} from "../utils/jwt";
 import redisClient from "../utils/connectRedis";
@@ -54,7 +54,6 @@ const getMeHandler = async (
     }
 }
 
-
 module.exports = {
-    getMeHandler
+    getMeHandler,
 }
