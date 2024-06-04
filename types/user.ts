@@ -7,3 +7,19 @@ export interface PreCreatedUser {
     phoneNumber: string,
     provider: string,
 }
+
+export interface UserFilters {
+    id?: string;
+    name?: string;
+    email?: string;
+    phoneNumber?: string;
+    provider?: string;
+    role?: string;
+    photo?: string;
+    createdAtBefore?: Date;
+    createdAtAfter?: Date;
+    sort?: string;
+    limit?: number;
+    offset?: number;
+    sortDirection?: 'asc' | 'desc';
+}

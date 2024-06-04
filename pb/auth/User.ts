@@ -9,6 +9,7 @@ export interface User {
   'role'?: (string);
   'phoneNumber'?: (string);
   'provider'?: (string);
+  'photo'?: (string);
   'createdAt'?: (_google_protobuf_Timestamp | null);
   'updatedAt'?: (_google_protobuf_Timestamp | null);
 }
@@ -20,6 +21,7 @@ export interface User__Output {
   'role': (string);
   'phoneNumber': (string);
   'provider': (string);
+  'photo': (string);
   'createdAt': (_google_protobuf_Timestamp__Output | null);
   'updatedAt': (_google_protobuf_Timestamp__Output | null);
 }

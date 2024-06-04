@@ -20,11 +20,11 @@ import customConfig from "./config/default";
 import {ProtoGrpcType} from "./pb/services";
 
 
-const { getMeHandler, createDriverFromUserHandler } = require('./controllers/user_controller');
+import {getMeHandler, getUserByIdHandler, getUsersWithFiltersHandler} from './controllers/user_controller';
 
-var app  = express();
+var app = express();
 
-const options= {
+const options = {
     keepCase: true,
     longs: String,
     enums: String,
@@ -55,6 +55,8 @@ const getServer = () => {
             RefreshToken: refreshTokensHandler,
             GetMe: getMeHandler,
             OAuthSignIn: oAuthSignInHandler,
+            GetUsersWithFilters: getUsersWithFiltersHandler,
+            GetUserById: getUserByIdHandler,
         }
     );
     return server;
@@ -73,4 +75,4 @@ async function main() {
     });
 }
 
-module.exports = app;
+export default app;

@@ -1,9 +1,8 @@
 import bcrypt from 'bcryptjs';
-import {PreCreatedUser} from "../types/user";
+import {PreCreatedUser, UserFilters} from "../types/user";
 import {SignUpUserInput__Output} from "../pb/auth/SignUpUserInput";
-import {getUserByEmail, getUserById, saveUser} from "../repositories/user.repo";
+import {getUserByEmail, getUserById as getUserByIdRepo, getUsersByFilters, saveUser} from "../repositories/user.repo";
 import {User, UserDTO, UserLoginDTO} from "../models/user";
-import {SignInUserResponse} from "../pb/auth/SignInUserResponse";
 import * as grpc from '@grpc/grpc-js';
 import redisClient from "../utils/connectRedis";
 import customConfig from "../config/default";
@@ -13,6 +12,7 @@ import {RegistrationError} from "../errors/RegistrationError";
 import {LoginError} from "../errors/LoginError";
 import {ApplicationError} from "../errors/ApplicationError";
 import UserModel from "../business-logic/schemas/user.schema";
+import {ObjectId} from "mongodb";
 
 export const createUser = async (preCreatedUser: SignUpUserInput__Output): Promise<User | null> => {
     const hashedPassword = preCreatedUser.password ? await bcrypt.hash(preCreatedUser.password, 12) : null;
@@ -114,11 +114,80 @@ export const refreshJwtTokens = async (refreshToken: string) => {
     }
 
     // Check if the user exist
-    const user = await getUserById(JSON.parse(session).id);
+    const user = await getUserByIdRepo(JSON.parse(session).id);
 
     if (!user) {
         throw new ApplicationError('Refresh token has expired, login again please', grpc.status.PERMISSION_DENIED);
     }
 
     return signTokens(User.getModel(user) as User);
+}
+
+export const getFilteredUsers = async (userFilters: UserFilters) => {
+    if (Object.keys(userFilters).length === 0) {
+        const users = await UserModel.find({});
+        return users.map(user => new UserDTO(user));
+    }
+
+    const filters: any = {};
+    if (userFilters.id) {
+        filters['_id'] = userFilters.id;
+    }
+    if (userFilters.name) {
+        filters['name'] = userFilters.name;
+    }
+    if (userFilters.email) {
+        filters['email'] = userFilters.email;
+    }
+    if (userFilters.phoneNumber) {
+        filters['phoneNumber'] = userFilters.phoneNumber;
+    }
+    if (userFilters.provider) {
+        filters['provider'] = userFilters.provider;
+    }
+    if (userFilters.role) {
+        filters['role'] = userFilters.role;
+    }
+    if (userFilters.photo) {
+        filters['photo'] = userFilters.photo;
+    }
+    if (userFilters.createdAtBefore || userFilters.createdAtAfter) {
+        filters['createdAt'] = {};
+        if (userFilters.createdAtBefore) {
+            filters['createdAt']['$lte'] = userFilters.createdAtBefore;
+        }
+        if (userFilters.createdAtAfter) {
+            filters['createdAt']['$gte'] = userFilters.createdAtAfter;
+        }
+    }
+    const pagination: {limit: number; skip: number} = {
+        limit: 20,
+        skip: 0
+    }
+    if (userFilters.limit) {
+        pagination.limit = userFilters.limit;
+    }
+    if (userFilters.offset) {
+        pagination.skip = userFilters.offset;
+    }
+
+    const sortCriteria: any = {};
+
+    if (!userFilters.sort) {
+        userFilters.sort = 'createdAt';
+    }
+    if (!userFilters.sortDirection) {
+        userFilters.sortDirection = 'desc';
+    }
+
+    sortCriteria[userFilters.sort] = userFilters.sortDirection === 'asc' ? 1 : -1;
+
+    const users = await getUsersByFilters(filters, sortCriteria, pagination);
+
+    return users.map((user: any) => new UserDTO(user));
+}
+
+export const getUserById = async (userId: string) => {
+    const user = await getUserByIdRepo(new ObjectId(userId));
+    return user ? new UserDTO(user) : null;
 }

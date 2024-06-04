@@ -1,4 +1,4 @@
-import {PreCreatedUser} from "../types/user";
+import {PreCreatedUser, UserFilters} from "../types/user";
 import UserModel from "../business-logic/schemas/user.schema";
 import {ObjectId} from "mongodb";
 
@@ -23,4 +23,12 @@ export const getUserByEmail = async (email: string) => {
 
 export const deleteUserById = async (id: ObjectId) => {
     return await UserModel.deleteById(id, 'user-svc__soft');
+}
+
+export const getUsersByFilters = async (filters: any, sortCriteria: any, pagination: any) => {
+    return UserModel
+        .find(filters)
+        .limit(pagination.limit)
+        .skip(pagination.skip)
+        .sort(sortCriteria);
 }

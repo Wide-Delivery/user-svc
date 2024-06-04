@@ -11,8 +11,9 @@ message User {
   string role = 4;
   string phoneNumber = 5;
   string provider = 6;
-  google.protobuf.Timestamp createdAt = 7;
-  google.protobuf.Timestamp updatedAt = 8;
+  string photo = 7;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
 }
 
 message UserResponse { User user = 1; }

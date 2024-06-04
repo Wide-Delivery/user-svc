@@ -5,6 +5,8 @@ import "rpc_signin_user.proto";
 import "user.proto";
 import "rpc_oauth_login.proto";
 
+import "google/protobuf/timestamp.proto";
+
 package auth;
 
 service AuthService {
@@ -13,6 +15,8 @@ service AuthService {
   rpc RefreshToken(RefreshTokenInput) returns (RefreshTokenResponse) {}
   rpc GetMe(GetMeInput) returns (UserResponse) {}
   rpc OAuthSignIn(OAuthSignInInput) returns (SignInUserResponse) {}
+  rpc GetUsersWithFilters(GetUsersWithFiltersRequest) returns (GetUsersWithFiltersResponse) {}
+  rpc GetUserById(GetUserByIdInput) returns (UserResponse) {}
 }
 
 message GetMeInput { string access_token = 1; }
@@ -35,4 +39,28 @@ message DriverId {
 message GeneralResponse {
   string status = 1;
   string message = 2;
+}
+
+message GetUsersWithFiltersRequest {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string phone_number = 4;
+  string provider = 5;
+  string role = 6;
+  string photo = 7;
+  string created_at_before = 8;
+  string created_at_after = 9;
+  string sort = 10;
+  string sortDirection = 11;
+  int32 limit = 12;
+  int32 offset = 13;
+}
+
+message GetUsersWithFiltersResponse {
+  repeated User users = 1;
+}
+
+message GetUserByIdInput {
+  string user_id = 1;
 }

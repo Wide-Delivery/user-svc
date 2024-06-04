@@ -1,3 +1,5 @@
+import {User__Output} from "../pb/auth/User";
+
 export class UserLoginDTO {
     public email: string;
     public password: string;
@@ -78,6 +80,8 @@ export class UserDTO {
     public photo: string;
     public provider: string;
     public role: string;
+    public createdAt: string;
+    public updatedAt: string;
 
     constructor(data: any) {
         this.id = data.id;
@@ -87,6 +91,8 @@ export class UserDTO {
         this.photo = data.photo;
         this.provider = data.provider;
         this.role = data.role;
+        this.createdAt = data.createdAt;
+        this.updatedAt = data.updatedAt;
     }
 
     static getModel(model: any) {
@@ -99,5 +105,25 @@ export class UserDTO {
             provider: model.provider,
             role: model.role
         }) : null;
+    }
+
+    getGrpcModel(): User__Output {
+        return {
+            id: this.id,
+            name: this.name,
+            email: this.email,
+            phoneNumber: this.phoneNumber,
+            photo: this.photo,
+            provider: this.provider,
+            role: this.role,
+            createdAt: {
+                seconds: (new Date(this.createdAt).getTime() / 1000).toString(),
+                nanos: 0
+            },
+            updatedAt: {
+                seconds: (new Date(this.updatedAt).getTime() / 1000).toString(),
+                nanos: 0
+            }
+        };
     }
 }

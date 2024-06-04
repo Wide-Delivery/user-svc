@@ -14,6 +14,9 @@ export interface ProtoGrpcType {
     GeneralResponse: MessageTypeDefinition
     GenericResponse: MessageTypeDefinition
     GetMeInput: MessageTypeDefinition
+    GetUserByIdInput: MessageTypeDefinition
+    GetUsersWithFiltersRequest: MessageTypeDefinition
+    GetUsersWithFiltersResponse: MessageTypeDefinition
     OAuthSignInInput: MessageTypeDefinition
     RefreshTokenInput: MessageTypeDefinition
     RefreshTokenResponse: MessageTypeDefinition

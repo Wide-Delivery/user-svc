@@ -3,6 +3,9 @@
 import type * as grpc from '@grpc/grpc-js'
 import type { MethodDefinition } from '@grpc/proto-loader'
 import type { GetMeInput as _auth_GetMeInput, GetMeInput__Output as _auth_GetMeInput__Output } from '../auth/GetMeInput';
+import type { GetUserByIdInput as _auth_GetUserByIdInput, GetUserByIdInput__Output as _auth_GetUserByIdInput__Output } from '../auth/GetUserByIdInput';
+import type { GetUsersWithFiltersRequest as _auth_GetUsersWithFiltersRequest, GetUsersWithFiltersRequest__Output as _auth_GetUsersWithFiltersRequest__Output } from '../auth/GetUsersWithFiltersRequest';
+import type { GetUsersWithFiltersResponse as _auth_GetUsersWithFiltersResponse, GetUsersWithFiltersResponse__Output as _auth_GetUsersWithFiltersResponse__Output } from '../auth/GetUsersWithFiltersResponse';
 import type { OAuthSignInInput as _auth_OAuthSignInInput, OAuthSignInInput__Output as _auth_OAuthSignInInput__Output } from '../auth/OAuthSignInInput';
 import type { RefreshTokenInput as _auth_RefreshTokenInput, RefreshTokenInput__Output as _auth_RefreshTokenInput__Output } from '../auth/RefreshTokenInput';
 import type { RefreshTokenResponse as _auth_RefreshTokenResponse, RefreshTokenResponse__Output as _auth_RefreshTokenResponse__Output } from '../auth/RefreshTokenResponse';
@@ -21,6 +24,24 @@ export interface AuthServiceClient extends grpc.Client {
   getMe(argument: _auth_GetMeInput, metadata: grpc.Metadata, callback: grpc.requestCallback<_auth_UserResponse__Output>): grpc.ClientUnaryCall;
   getMe(argument: _auth_GetMeInput, options: grpc.CallOptions, callback: grpc.requestCallback<_auth_UserResponse__Output>): grpc.ClientUnaryCall;
   getMe(argument: _auth_GetMeInput, callback: grpc.requestCallback<_auth_UserResponse__Output>): grpc.ClientUnaryCall;
+  
+  GetUserById(argument: _auth_GetUserByIdInput, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_auth_UserResponse__Output>): grpc.ClientUnaryCall;
+  GetUserById(argument: _auth_GetUserByIdInput, metadata: grpc.Metadata, callback: grpc.requestCallback<_auth_UserResponse__Output>): grpc.ClientUnaryCall;
+  GetUserById(argument: _auth_GetUserByIdInput, options: grpc.CallOptions, callback: grpc.requestCallback<_auth_UserResponse__Output>): grpc.ClientUnaryCall;
+  GetUserById(argument: _auth_GetUserByIdInput, callback: grpc.requestCallback<_auth_UserResponse__Output>): grpc.ClientUnaryCall;
+  getUserById(argument: _auth_GetUserByIdInput, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_auth_UserResponse__Output>): grpc.ClientUnaryCall;
+  getUserById(argument: _auth_GetUserByIdInput, metadata: grpc.Metadata, callback: grpc.requestCallback<_auth_UserResponse__Output>): grpc.ClientUnaryCall;
+  getUserById(argument: _auth_GetUserByIdInput, options: grpc.CallOptions, callback: grpc.requestCallback<_auth_UserResponse__Output>): grpc.ClientUnaryCall;
+  getUserById(argument: _auth_GetUserByIdInput, callback: grpc.requestCallback<_auth_UserResponse__Output>): grpc.ClientUnaryCall;
+  
+  GetUsersWithFilters(argument: _auth_GetUsersWithFiltersRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_auth_GetUsersWithFiltersResponse__Output>): grpc.ClientUnaryCall;
+  GetUsersWithFilters(argument: _auth_GetUsersWithFiltersRequest, metadata: grpc.Metadata, callback: grpc.requestCallback<_auth_GetUsersWithFiltersResponse__Output>): grpc.ClientUnaryCall;
+  GetUsersWithFilters(argument: _auth_GetUsersWithFiltersRequest, options: grpc.CallOptions, callback: grpc.requestCallback<_auth_GetUsersWithFiltersResponse__Output>): grpc.ClientUnaryCall;
+  GetUsersWithFilters(argument: _auth_GetUsersWithFiltersRequest, callback: grpc.requestCallback<_auth_GetUsersWithFiltersResponse__Output>): grpc.ClientUnaryCall;
+  getUsersWithFilters(argument: _auth_GetUsersWithFiltersRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_auth_GetUsersWithFiltersResponse__Output>): grpc.ClientUnaryCall;
+  getUsersWithFilters(argument: _auth_GetUsersWithFiltersRequest, metadata: grpc.Metadata, callback: grpc.requestCallback<_auth_GetUsersWithFiltersResponse__Output>): grpc.ClientUnaryCall;
+  getUsersWithFilters(argument: _auth_GetUsersWithFiltersRequest, options: grpc.CallOptions, callback: grpc.requestCallback<_auth_GetUsersWithFiltersResponse__Output>): grpc.ClientUnaryCall;
+  getUsersWithFilters(argument: _auth_GetUsersWithFiltersRequest, callback: grpc.requestCallback<_auth_GetUsersWithFiltersResponse__Output>): grpc.ClientUnaryCall;
   
   OAuthSignIn(argument: _auth_OAuthSignInInput, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_auth_SignInUserResponse__Output>): grpc.ClientUnaryCall;
   OAuthSignIn(argument: _auth_OAuthSignInInput, metadata: grpc.Metadata, callback: grpc.requestCallback<_auth_SignInUserResponse__Output>): grpc.ClientUnaryCall;
@@ -63,6 +84,10 @@ export interface AuthServiceClient extends grpc.Client {
 export interface AuthServiceHandlers extends grpc.UntypedServiceImplementation {
   GetMe: grpc.handleUnaryCall<_auth_GetMeInput__Output, _auth_UserResponse>;
   
+  GetUserById: grpc.handleUnaryCall<_auth_GetUserByIdInput__Output, _auth_UserResponse>;
+  
+  GetUsersWithFilters: grpc.handleUnaryCall<_auth_GetUsersWithFiltersRequest__Output, _auth_GetUsersWithFiltersResponse>;
+  
   OAuthSignIn: grpc.handleUnaryCall<_auth_OAuthSignInInput__Output, _auth_SignInUserResponse>;
   
   RefreshToken: grpc.handleUnaryCall<_auth_RefreshTokenInput__Output, _auth_RefreshTokenResponse>;
@@ -75,6 +100,8 @@ export interface AuthServiceHandlers extends grpc.UntypedServiceImplementation {
 
 export interface AuthServiceDefinition extends grpc.ServiceDefinition {
   GetMe: MethodDefinition<_auth_GetMeInput, _auth_UserResponse, _auth_GetMeInput__Output, _auth_UserResponse__Output>
+  GetUserById: MethodDefinition<_auth_GetUserByIdInput, _auth_UserResponse, _auth_GetUserByIdInput__Output, _auth_UserResponse__Output>
+  GetUsersWithFilters: MethodDefinition<_auth_GetUsersWithFiltersRequest, _auth_GetUsersWithFiltersResponse, _auth_GetUsersWithFiltersRequest__Output, _auth_GetUsersWithFiltersResponse__Output>
   OAuthSignIn: MethodDefinition<_auth_OAuthSignInInput, _auth_SignInUserResponse, _auth_OAuthSignInInput__Output, _auth_SignInUserResponse__Output>
   RefreshToken: MethodDefinition<_auth_RefreshTokenInput, _auth_RefreshTokenResponse, _auth_RefreshTokenInput__Output, _auth_RefreshTokenResponse__Output>
   SignInUser: MethodDefinition<_auth_SignInUserInput, _auth_SignInUserResponse, _auth_SignInUserInput__Output, _auth_SignInUserResponse__Output>
