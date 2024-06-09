@@ -7,9 +7,15 @@ type SubtypeConstructor<Constructor extends new (...args: any) => any, Subtype> 
 };
 
 export interface ProtoGrpcType {
-  auth: {
-    SignInUserInput: MessageTypeDefinition
-    SignInUserResponse: MessageTypeDefinition
+  com: {
+    widedelivery: {
+      auth: {
+        proto: {
+          SignInUserInput: MessageTypeDefinition
+          SignInUserResponse: MessageTypeDefinition
+        }
+      }
+    }
   }
 }
 

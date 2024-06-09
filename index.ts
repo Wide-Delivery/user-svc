@@ -20,7 +20,12 @@ import customConfig from "./config/default";
 import {ProtoGrpcType} from "./pb/services";
 
 
-import {getMeHandler, getUserByIdHandler, getUsersWithFiltersHandler} from './controllers/user_controller';
+import {
+    getMeHandler,
+    getUserByIdHandler,
+    getUsersWithFiltersHandler,
+    updateUserHandler
+} from './controllers/user_controller';
 
 var app = express();
 
@@ -45,7 +50,7 @@ const proto = grpc.loadPackageDefinition(
     packageDef
 ) as unknown as ProtoGrpcType;
 
-const authPkg = proto.auth;
+const authPkg = proto.com.widedelivery.auth.service;
 
 const getServer = () => {
     const server = new grpc.Server();
@@ -57,6 +62,7 @@ const getServer = () => {
             OAuthSignIn: oAuthSignInHandler,
             GetUsersWithFilters: getUsersWithFiltersHandler,
             GetUserById: getUserByIdHandler,
+            UpdateUser: updateUserHandler,
         }
     );
     return server;

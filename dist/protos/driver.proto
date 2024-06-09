@@ -1,13 +1,13 @@
 syntax = "proto3";
 
-package auth;
+package com.widedelivery.driver.proto;
 
 import "truck.proto";
 
 message Driver {
-  string driverId = 1;
-  string userId = 2;
-  bool mayBeLoader = 3;
-  int32 searchRadius = 4;
+  string driver_id = 1;
+  string user_id = 2;
+  bool may_be_loader = 3;
+  int32 search_radius = 4;
   Truck truck = 5;
 }

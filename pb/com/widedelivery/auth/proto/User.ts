@@ -1,13 +1,13 @@
 // Original file: protos/user.proto
 
-import type { Timestamp as _google_protobuf_Timestamp, Timestamp__Output as _google_protobuf_Timestamp__Output } from '../google/protobuf/Timestamp';
+import type { Timestamp as _google_protobuf_Timestamp, Timestamp__Output as _google_protobuf_Timestamp__Output } from '../../../../google/protobuf/Timestamp';
 
 export interface User {
   'id'?: (string);
   'name'?: (string);
   'email'?: (string);
   'role'?: (string);
-  'phoneNumber'?: (string);
+  'phone_number'?: (string);
   'provider'?: (string);
   'photo'?: (string);
   'createdAt'?: (_google_protobuf_Timestamp | null);
@@ -19,7 +19,7 @@ export interface User__Output {
   'name': (string);
   'email': (string);
   'role': (string);
-  'phoneNumber': (string);
+  'phone_number': (string);
   'provider': (string);
   'photo': (string);
   'createdAt': (_google_protobuf_Timestamp__Output | null);

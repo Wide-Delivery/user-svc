@@ -1,20 +1,19 @@
 import bcrypt from 'bcryptjs';
 import {PreCreatedUser, UserFilters} from "../types/user";
-import {SignUpUserInput__Output} from "../pb/auth/SignUpUserInput";
 import {getUserByEmail, getUserById as getUserByIdRepo, getUsersByFilters, saveUser} from "../repositories/user.repo";
 import {User, UserDTO, UserLoginDTO} from "../models/user";
 import * as grpc from '@grpc/grpc-js';
 import redisClient from "../utils/connectRedis";
 import customConfig from "../config/default";
 import {signJwt, verifyJwt} from "../utils/jwt";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {RegistrationError} from "../errors/RegistrationError";
 import {LoginError} from "../errors/LoginError";
 import {ApplicationError} from "../errors/ApplicationError";
 import UserModel from "../business-logic/schemas/user.schema";
 import {ObjectId} from "mongodb";
 
-export const createUser = async (preCreatedUser: SignUpUserInput__Output): Promise<User | null> => {
+export const createUser = async (preCreatedUser: PreCreatedUser): Promise<User | null> => {
     const hashedPassword = preCreatedUser.password ? await bcrypt.hash(preCreatedUser.password, 12) : null;
 
     // validate email, phoneNmer
@@ -188,6 +187,5 @@ export const getFilteredUsers = async (userFilters: UserFilters) => {
 }
 
 export const getUserById = async (userId: string) => {
-    const user = await getUserByIdRepo(new ObjectId(userId));
-    return user ? new UserDTO(user) : null;
+    return await getUserByIdRepo(new ObjectId(userId));
 }

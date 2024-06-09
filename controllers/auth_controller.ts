@@ -1,17 +1,17 @@
-import {SignInUserInput__Output} from "../pb/auth/SignInUserInput";
-import {SignUpUserResponse} from "../pb/auth/SignUpUserResponse";
 import * as grpc from "@grpc/grpc-js";
 import {createUser, isUserRegistered, refreshJwtTokens, signIn, signTokens} from "../services/user.service";
 import {PreCreatedUser, User, UserLoginDTO} from "../models/user";
-import {SignUpUserInput__Output} from "../pb/auth/SignUpUserInput";
-import {SignInUserResponse__Output} from "../pb/auth/SignInUserResponse";
-import {RefreshTokenInput__Output} from "../pb/auth/RefreshTokenInput";
-import {RefreshTokenResponse} from "../pb/auth/RefreshTokenResponse";
-import {OAuthSignInInput__Output} from "../pb/auth/OAuthSignInInput";
 import {OAuth2Client} from "google-auth-library";
 import {OAUTH_PROVIDERS} from "../constants/oauth-providers";
 import UserModel from "../business-logic/schemas/user.schema";
 import {getUserByEmail} from "../repositories/user.repo";
+import {SignInUserInput__Output} from "../pb/com/widedelivery/auth/proto/SignInUserInput";
+import {SignInUserResponse__Output} from "../pb/com/widedelivery/auth/proto/SignInUserResponse";
+import {SignUpUserInput__Output} from "../pb/com/widedelivery/auth/proto/SignUpUserInput";
+import {SignUpUserResponse} from "../pb/com/widedelivery/auth/proto/SignUpUserResponse";
+import {RefreshTokenInput__Output} from "../pb/com/widedelivery/auth/service/RefreshTokenInput";
+import {RefreshTokenResponse} from "../pb/com/widedelivery/auth/service/RefreshTokenResponse";
+import {OAuthSignInInput__Output} from "../pb/com/widedelivery/auth/proto/OAuthSignInInput";
 
 
 
@@ -45,28 +45,22 @@ export const loginController = async (call: grpc.ServerUnaryCall<SignInUserInput
 export const registerController = async (call: grpc.ServerUnaryCall<SignUpUserInput__Output,
     SignUpUserResponse>, callback: grpc.sendUnaryData<SignUpUserResponse>) => {
 
-    const preCreatedUser = new PreCreatedUser(call.request);
+    const preCreatedUser = PreCreatedUser.parseFromGrpcRequest(call.request);
+
+    if (!preCreatedUser) {
+        callback({
+            code: grpc.status.INVALID_ARGUMENT,
+            message: 'Invalid request data.'
+        })
+        return;
+    }
 
     try {
         const createdUser = await createUser(preCreatedUser);
-        // const id = new ObjectId('65dfaa40880dacc6f50152a6');
-        // const result = await deleteUserById(id);
+
         if (createdUser !== null) {
             callback(null, {
-                user: {
-                    id: createdUser.id,
-                    name: createdUser.name,
-                    email: createdUser.email,
-                    phoneNumber: createdUser.phoneNumber,
-                    provider: createdUser.provider,
-                    role: 'user',
-                    createdAt: {
-                        seconds: createdUser.createdAt.getSeconds()
-                    },
-                    updatedAt: {
-                        seconds: createdUser.updatedAt.getSeconds()
-                    }
-                },
+                user: createdUser.getGrpcModel()
             })
 
         }

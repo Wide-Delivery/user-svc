@@ -1,30 +1,30 @@
 syntax = "proto3";
 
-package auth;
+package com.widedelivery.driver.proto;
 
 message TruckInput {
-  string truckBrand = 1;
-  string truckModel = 2;
-  string truckPlate = 3;
-  string truckSerialNumber = 4;
-  string truckColor = 5;
-  double freeSpaceLength = 6;
-  double freeSpaceWidth = 7;
-  double freeSpaceHeight = 8;
+  string truck_brand = 1;
+  string truck_model = 2;
+  string truck_plate = 3;
+  string truck_serial_number = 4;
+  string truck_color = 5;
+  double ree_space_length = 6;
+  double ree_space_width = 7;
+  double ree_space_height = 8;
 }
 
 message Truck {
-  string truckBrand = 1;
-  string truckModel = 2;
-  string truckPlate = 3;
-  string truckSerialNumber = 4;
-  string truckColor = 5;
-  TruckType truckType = 6;
-  double freeSpaceLength = 7;
-  double freeSpaceWidth = 8;
-  double freeSpaceHeight = 9;
-  int32 transportationsCount = 10;
-  bool isAvailableNow = 11;
+  string truck_brand = 1;
+  string truck_model = 2;
+  string truck_plate = 3;
+  string truck_serial_number = 4;
+  string truck_color = 5;
+  TruckType truck_type = 6;
+  double free_space_length = 7;
+  double free_space_width = 8;
+  double free_space_height = 9;
+  int32 transportations_count = 10;
+  bool is_available_now = 11;
 }
 
 enum TruckType {

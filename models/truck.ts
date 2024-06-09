@@ -1,4 +1,4 @@
-import {Truck__Output} from "../pb/auth/Truck";
+import {Truck__Output} from "../pb/com/widedelivery/driver/proto/Truck";
 
 export enum TrackType {
     SMALL= "SMALL",
@@ -51,17 +51,17 @@ export class Truck {
 
     static getGrpcModel(model: Truck): Truck__Output {
         return {
-            truckBrand: model.truckBrand,
-            truckModel: model.truckModel,
-            truckPlate: model.truckPlate,
-            truckSerialNumber: model.truckSerialNumber,
-            truckColor: model.truckColor,
-            truckType: model.truckType,
-            freeSpaceLength: model.freeSpaceLength,
-            freeSpaceWidth: model.freeSpaceWidth,
-            freeSpaceHeight: model.freeSpaceHeight,
-            transportationsCount: model.transportationsCount,
-            isAvailableNow: model.isAvailableNow,
+            truck_brand: model.truckBrand,
+            truck_model: model.truckModel,
+            truck_plate: model.truckPlate,
+            truck_serial_number: model.truckSerialNumber,
+            truck_color: model.truckColor,
+            truck_type: model.truckType,
+            free_space_length: model.freeSpaceLength,
+            free_space_width: model.freeSpaceWidth,
+            free_space_height: model.freeSpaceHeight,
+            transportations_count: model.transportationsCount,
+            is_available_now: model.isAvailableNow,
         }
     }
 }

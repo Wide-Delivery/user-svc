@@ -12,7 +12,7 @@ export interface GetUsersWithFiltersRequest {
   'created_at_before'?: (string);
   'created_at_after'?: (string);
   'sort'?: (string);
-  'sortDirection'?: (string);
+  'sort_direction'?: (string);
   'limit'?: (number);
   'offset'?: (number);
 }
@@ -28,7 +28,7 @@ export interface GetUsersWithFiltersRequest__Output {
   'created_at_before': (string);
   'created_at_after': (string);
   'sort': (string);
-  'sortDirection': (string);
+  'sort_direction': (string);
   'limit': (number);
   'offset': (number);
 }

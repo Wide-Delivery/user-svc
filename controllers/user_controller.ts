@@ -1,15 +1,17 @@
 import * as grpc from "@grpc/grpc-js";
-import {GetMeInput__Output} from "../pb/auth/GetMeInput";
 import {verifyJwt} from "../utils/jwt";
 import redisClient from "../utils/connectRedis";
-import {UserResponse__Output} from "../pb/auth/UserResponse";
-import {GetUsersWithFiltersRequest__Output} from "../pb/auth/GetUsersWithFiltersRequest";
-import {GetUsersWithFiltersResponse__Output} from "../pb/auth/GetUsersWithFiltersResponse";
 import {UserFilters} from "../types/user";
 import {getFilteredUsers, getUserById as getUserByIdRequest} from "../services/user.service";
-import {UserDTO} from "../models/user";
+import {User, UserDTO} from "../models/user";
 import {Status} from "@grpc/grpc-js/build/src/constants";
-import {GetUserByIdInput__Output} from "../pb/auth/GetUserByIdInput";
+import {UpdateUserInput, UpdateUserInput__Output} from "../pb/com/widedelivery/auth/proto/UpdateUserInput";
+import UserModel from "../business-logic/schemas/user.schema";
+import {UserResponse__Output} from "../pb/com/widedelivery/auth/proto/UserResponse";
+import {GetMeInput__Output} from "../pb/com/widedelivery/auth/service/GetMeInput";
+import {GetUsersWithFiltersRequest__Output} from "../pb/com/widedelivery/auth/service/GetUsersWithFiltersRequest";
+import {GetUsersWithFiltersResponse__Output} from "../pb/com/widedelivery/auth/service/GetUsersWithFiltersResponse";
+import {GetUserByIdInput__Output} from "../pb/com/widedelivery/auth/service/GetUserByIdInput";
 
 export const getMeHandler = async (
     call: grpc.ServerUnaryCall<GetMeInput__Output, UserResponse__Output>,
@@ -35,7 +37,7 @@ export const getMeHandler = async (
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                phoneNumber: '+380990000001',
+                phone_number: '+380990000001',
                 photo: user.photo,
                 provider: user.provider,
                 role: user.role,
@@ -49,7 +51,11 @@ export const getMeHandler = async (
                 }
             },
         })
-
+    } else {
+        callback({
+            code: grpc.status.UNAUTHENTICATED,
+            message: 'Please sign in again.',
+        });
     }
     // if (!user) {
     //     const userFromDb = await mongoclient get user
@@ -75,7 +81,7 @@ export const getUsersWithFiltersHandler = async (
             sort: requestFilters.sort,
             limit: requestFilters.limit || 20,
             offset: requestFilters.offset || 0,
-            sortDirection: requestFilters.sortDirection === 'desc' ? 'desc' : 'asc',
+            sortDirection: requestFilters.sort_direction === 'desc' ? 'desc' : 'asc',
         };
 
         // Retrieve filtered users
@@ -101,7 +107,7 @@ export const getUserByIdHandler = async (
     try {
         const userId = call.request.user_id;
 
-        const user: UserDTO | null = await getUserByIdRequest(userId);
+        const user: any = await getUserByIdRequest(userId);
 
         if (!user) {
             callback({
@@ -111,12 +117,67 @@ export const getUserByIdHandler = async (
             return;
         }
 
-        callback(null, { user: user.getGrpcModel() });
+        callback(null, { user: new UserDTO(user).getGrpcModel() });
     } catch (error) {
         console.error('Failed to get user by id:', error);
         callback({
             code: Status.INTERNAL,
             message: 'Failed to retrieve user due to internal server error'
+        });
+    }
+}
+
+export const updateUserHandler = async (
+    call: grpc.ServerUnaryCall<UpdateUserInput, UserResponse__Output>,
+    callback: grpc.sendUnaryData<UserResponse__Output>) => {
+    try {
+        const userId = call.request.user_id;
+        const updatedUser = User.parseFromGrpcRequest(call.request);
+
+        if (!userId || !updatedUser) {
+            callback({
+                code: Status.INVALID_ARGUMENT,
+                message: 'User id is required, and at least one field to update',
+            });
+            return;
+        }
+
+        const user: any = await getUserByIdRequest(userId);
+
+        if (!user) {
+            callback({
+                code: Status.INVALID_ARGUMENT,
+                message: `User not found by id ${userId}`,
+            });
+            return;
+        }
+
+        if (updatedUser.name) {
+            user.name = updatedUser.name;
+        }
+        if (updatedUser.email) {
+            user.email = updatedUser.email;
+        }
+        if (updatedUser.phoneNumber) {
+            user.phoneNumber = updatedUser.phoneNumber;
+        }
+        if (updatedUser.photo) {
+            user.photo = updatedUser.photo;
+        }
+        if (updatedUser.role) {
+            user.role = updatedUser.role;
+        }
+
+        const updatedUserModel = await user.save();
+
+        const updatedUserDTO = new UserDTO(updatedUserModel);
+
+        callback(null, {user: updatedUserDTO.getGrpcModel()});
+    } catch (error) {
+        console.error('Failed to update user with id:', call.request.user_id);
+        callback({
+            code: Status.INTERNAL,
+            message: 'Failed to update user due to internal server error'
         });
     }
 }

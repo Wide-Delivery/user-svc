@@ -1,5 +1,5 @@
 import {Truck} from "./truck";
-import {Driver__Output} from "../pb/auth/Driver";
+import {Driver__Output} from "../pb/com/widedelivery/driver/proto/Driver";
 
 export class PreCreatedDriver {
     public userId: string;
@@ -53,10 +53,10 @@ export class Driver {
 
     static getGrpcModel(model: Driver): Driver__Output {
         return {
-            driverId: model.driverId,
-            userId: model.userId,
-            mayBeLoader: model.mayBeLoader,
-            searchRadius: model.searchRadius,
+            driver_id: model.driverId,
+            user_id: model.userId,
+            may_be_loader: model.mayBeLoader,
+            search_radius: model.searchRadius,
             truck: Truck.getGrpcModel(model.truck),
         }
     }

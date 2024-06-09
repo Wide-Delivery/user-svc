@@ -1,4 +1,6 @@
-import {User__Output} from "../pb/auth/User";
+import {UpdateUserInput} from "../pb/com/widedelivery/auth/proto/UpdateUserInput";
+import {SignUpUserInput__Output} from "../pb/com/widedelivery/auth/proto/SignUpUserInput";
+import {User__Output} from "../pb/com/widedelivery/auth/proto/User";
 
 export class UserLoginDTO {
     public email: string;
@@ -29,6 +31,16 @@ export class PreCreatedUser {
         this.photo = data.photo;
         this.provider = data.provider;
         this.role = data.role;
+    }
+
+    static parseFromGrpcRequest(request: SignUpUserInput__Output) {
+        return request ? new PreCreatedUser({
+            name: request.name,
+            email: request.email,
+            password: request.password,
+            phoneNumber: request.phone_number,
+            provider: request.provider
+        }) : null;
     }
 }
 
@@ -67,8 +79,40 @@ export class User {
             phoneNumber: model.phoneNumber,
             photo: model.photo,
             password: model.password,
+            role: model.role,
             provider: model.provider,
         }) : null;
+    }
+
+    static parseFromGrpcRequest(request: UpdateUserInput) {
+        return request ? new User({
+            id: request.user_id,
+            name: request.name,
+            email: request.email,
+            phoneNumber: request.phone_number,
+            photo: request.photo,
+            role: request.role
+        }) : null;
+    }
+
+    getGrpcModel(): User__Output {
+        return {
+            id: this.id,
+            name: this.name,
+            email: this.email,
+            phone_number: this.phoneNumber,
+            photo: this.photo,
+            provider: this.provider,
+            role: this.role,
+            createdAt: {
+                seconds: (this.createdAt.getTime() / 1000).toString(),
+                nanos: 0
+            },
+            updatedAt: {
+                seconds: (this.updatedAt.getTime() / 1000).toString(),
+                nanos: 0
+            }
+        };
     }
 }
 
@@ -112,7 +156,7 @@ export class UserDTO {
             id: this.id,
             name: this.name,
             email: this.email,
-            phoneNumber: this.phoneNumber,
+            phone_number: this.phoneNumber,
             photo: this.photo,
             provider: this.provider,
             role: this.role,
